@@ -19,10 +19,10 @@ varCheckList=(
 
 envContents=""
 
-if [ -f ".env" ]; then
-    envContents=`cat .env`
+if [ -f "${AGENT_ROOT:-"."}/.env" ]; then
+    envContents=`cat "${AGENT_ROOT:-"."}/.env"`
 else
-    touch .env
+    touch "${AGENT_ROOT:-"."}/.env"
 fi
 
 function writeVar()
@@ -32,12 +32,12 @@ function writeVar()
     if test "${envContents#*$checkDelim}" = "$envContents"
     then
         if [ ! -z "${!checkVar}" ]; then
-            echo "${checkVar}=${!checkVar}">>.env
+            echo "${checkVar}=${!checkVar}">>"${AGENT_ROOT:-"."}/.env"
         fi
     fi
 }
 
-echo $PATH>.path
+echo $PATH>"${AGENT_ROOT:-"."}/.path"
 
 for var_name in ${varCheckList[@]}
 do

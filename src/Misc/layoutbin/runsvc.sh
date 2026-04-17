@@ -4,9 +4,9 @@
 # for more info on how to propagate SIGTERM to a child process see: http://veithen.github.io/2014/11/16/sigterm-propagation.html
 trap 'kill -INT $PID' TERM INT
 
-if [ -f ".path" ]; then
+if [ -f "${AGENT_ROOT:-"."}/.path" ]; then
     # configure
-    export PATH=`cat .path`
+    export PATH=`cat "${AGENT_ROOT:-"."}/.path"`
     echo ".path=${PATH}"
 fi
 

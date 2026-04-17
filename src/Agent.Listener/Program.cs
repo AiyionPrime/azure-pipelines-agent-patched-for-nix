@@ -114,7 +114,9 @@ namespace Microsoft.VisualStudio.Services.Agent.Listener
                 }
 
                 // Add environment variables from .env file
-                string envFile = Path.Combine(context.GetDirectory(WellKnownDirectory.Root), ".env");
+                var binDir = Path.Combine(context.GetDirectory(WellKnownDirectory.Root));
+                var rootDir = Environment.GetEnvironmentVariable("AGENT_ROOT") ?? new DirectoryInfo(binDir).Parent.FullName;
+                string envFile = Path.Combine(rootDir, ".env");
                 if (File.Exists(envFile))
                 {
                     var envContents = File.ReadAllLines(envFile);
