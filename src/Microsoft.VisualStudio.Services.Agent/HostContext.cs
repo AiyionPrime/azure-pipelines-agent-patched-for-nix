@@ -215,7 +215,7 @@ namespace Microsoft.VisualStudio.Services.Agent
 
                 case WellKnownDirectory.Externals:
                     path = Path.Combine(
-                        GetDirectory(WellKnownDirectory.Root),
+                        new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName,
                         Constants.Path.ExternalsDirectory);
                     break;
 
@@ -232,7 +232,8 @@ namespace Microsoft.VisualStudio.Services.Agent
                     break;
 
                 case WellKnownDirectory.Root:
-                    path = new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName;
+                    path = Environment.GetEnvironmentVariable("AGENT_ROOT")
+                                 ?? new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName;
                     break;
 
                 case WellKnownDirectory.ServerOM:
@@ -330,14 +331,8 @@ namespace Microsoft.VisualStudio.Services.Agent
 
         private string GetDiagOrDefault(string diagFolder)
         {
-            if (!string.IsNullOrEmpty(diagFolder))
-            {
-                return diagFolder;
-            }
-
             return Path.Combine(
-                new DirectoryInfo(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)).Parent.FullName,
-                Constants.Path.DiagDirectory);
+                GetDirectory(WellKnownDirectory.Diag);
         }
 
         public string GetConfigFile(WellKnownConfigFile configFile)
