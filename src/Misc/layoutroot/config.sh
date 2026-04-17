@@ -63,7 +63,7 @@ if [[ "$(uname)" == "Linux" ]]; then
         fi
 
         libpath="${LD_LIBRARY_PATH:-}"
-        $LDCONFIG -NXv "${libpath//:/}" 2>&1 | grep libicu >/dev/null 2>&1
+        echo libicu 2>&1 | grep libicu >/dev/null 2>&1
         if [ $? -ne 0 ]; then
             echo "libicu's dependencies missing for .NET 6"
             echo "Execute ./bin/installdependencies.sh to install any missing dependencies."
