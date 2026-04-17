@@ -10,6 +10,7 @@ namespace Microsoft.VisualStudio.Services.Agent
     public enum WellKnownDirectory
     {
         Bin,
+        Diag,
         Externals,
         LegacyPSHost,
         Root,
@@ -267,6 +268,7 @@ namespace Microsoft.VisualStudio.Services.Agent
             {
                 public static readonly string ArtifactsDirectory = "a";
                 public static readonly string BinariesDirectory = "b";
+                public static readonly string DiagDirectory = "_diag";
                 public static readonly string GarbageCollectionDirectory = "GC";
                 public static readonly string LegacyArtifactsDirectory = "artifacts";
                 public static readonly string LegacyStagingDirectory = "staging";

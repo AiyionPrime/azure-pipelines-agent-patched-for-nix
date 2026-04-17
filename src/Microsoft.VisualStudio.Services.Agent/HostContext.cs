@@ -121,8 +121,10 @@ namespace Microsoft.VisualStudio.Services.Agent
                     logRetentionDays = _defaultLogRetentionDays;
                 }
 
-                // this should give us _diag folder under agent root directory as default value for diagLogDirctory
-                string diagLogPath = GetDiagDirectory(_hostType);
+                // this should give us _diag folder under agent root directory as default value for diagLogDirectory
+                #pragma warning disable CA2214
+                string diagLogPath = GetDirectory(WellKnownDirectory.Diag);
+                #pragma warning restore CA2214
                 _traceManager = new TraceManager(new HostTraceListener(diagLogPath, hostType.ToString(), logPageSize, logRetentionDays), this.SecretMasker);
 
             }
@@ -217,6 +219,12 @@ namespace Microsoft.VisualStudio.Services.Agent
                     path = Path.Combine(
                         new DirectoryInfo(GetDirectory(WellKnownDirectory.Bin)).Parent.FullName,
                         Constants.Path.ExternalsDirectory);
+                    break;
+
+                case WellKnownDirectory.Diag:
+                    path = Path.Combine(
+                       GetDirectory(WellKnownDirectory.Root),
+                        Constants.Path.DiagDirectory);
                     break;
 
                 case WellKnownDirectory.LegacyPSHost:
@@ -314,7 +322,11 @@ namespace Microsoft.VisualStudio.Services.Agent
                     throw new NotSupportedException($"Unexpected well known directory: '{directory}'");
             }
 
-            _trace.Info($"Well known directory '{directory}': '{path}'");
+            // only log if we’ve already set up _trace
+            if (_trace != null)
+            {
+                _trace.Info($"Well known directory '{directory}': '{path}'");
+            }
             return path;
         }
 
